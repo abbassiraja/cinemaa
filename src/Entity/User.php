@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -48,6 +50,28 @@ class User implements UserInterface
      * @ORM\Column(type="date")
      */
     private $date_de_naissance;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Evaluation::class, mappedBy="id_user")
+     */
+    private $evaluations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="id_user")
+     */
+    private $reservations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="id_user")
+     */
+    private $commentaires;
+
+    public function __construct()
+    {
+        $this->evaluations = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,6 +186,96 @@ class User implements UserInterface
     public function setDateDeNaissance(\DateTimeInterface $date_de_naissance): self
     {
         $this->date_de_naissance = $date_de_naissance;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Evaluation[]
+     */
+    public function getEvaluations(): Collection
+    {
+        return $this->evaluations;
+    }
+
+    public function addEvaluation(Evaluation $evaluation): self
+    {
+        if (!$this->evaluations->contains($evaluation)) {
+            $this->evaluations[] = $evaluation;
+            $evaluation->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvaluation(Evaluation $evaluation): self
+    {
+        if ($this->evaluations->removeElement($evaluation)) {
+            // set the owning side to null (unless already changed)
+            if ($evaluation->getIdUser() === $this) {
+                $evaluation->setIdUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getIdUser() === $this) {
+                $reservation->setIdUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentaire[]
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires[] = $commentaire;
+            $commentaire->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): self
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getIdUser() === $this) {
+                $commentaire->setIdUser(null);
+            }
+        }
 
         return $this;
     }
