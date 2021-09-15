@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cinema{% endblock %}
+
+{% block body %}
+    <h1>Cinema</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cinema.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom_cinema</th>
+                <td>{{ cinema.nomCinema }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ cinema.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Num_tel</th>
+                <td>{{ cinema.numTel }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ cinema.email }}</td>
+            </tr>
+            <tr>
+                <th>Mot_de_passe</th>
+                <td>{{ cinema.motDePasse }}</td>
+            </tr>
+            <tr>
+                <th>Image</th>
+                <td>{{ cinema.image }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cinema_index') }}">back to list</a>
+
+    <a href="{{ path('cinema_edit', {'id': cinema.id}) }}">edit</a>
+
+    {{ include('cinema/_delete_form.html.twig') }}
+{% endblock %}
